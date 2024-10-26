@@ -10,8 +10,8 @@ const PORT = process.env.PORT
 const app = express()
 
 app.use(express.json())
-app.use("/books", bookRouter)
 app.use("/users", userRouter)
+app.use("/books", bookRouter)
 app.use("/comments", commentRouter)
 
 app.listen(PORT , () => {

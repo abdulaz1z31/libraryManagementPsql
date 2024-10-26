@@ -1,48 +1,40 @@
 import pool from "./database.js";
 
 export const createTables = async () => {
-    try {
-        const tables = [
-            `CREATE TABLE IF NOT EXISTS users (
-                id serial PRIMARY KEY,
-                username VARCHAR(20) UNIQUE,
-                email varchar(40),
-                password varchar(14),
-                created_at DATE
-            )`,
-            `CREATE TABLE IF NOT EXISTS books (
-                id serial PRIMARY KEY,
-                title text,
-                author varchar(20),
-                publication_date date,
-                genre varchar(20),
-                user_id int,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )`,
-            `CREATE TABLE IF NOT EXISTS comments (
-                id serial PRIMARY KEY,
-                text text,
-                created_at date,
-                book_id int,
-                user_id int,
-                FOREIGN KEY (book_id) REFERENCES books(id),
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )`,
-            `CREATE TABLE IF NOT EXISTS photos (
-                id serial PRIMARY KEY,
-                url text,
-                book_id int,
-                uploaded_at date,
-                FOREIGN KEY (book_id) REFERENCES books(id)
-            )
-            `
-        ];
+  try {
+    const tables = [
+        `CREATE TABLE IF NOT EXISTS users (
+            id serial PRIMARY KEY,
+            username VARCHAR(20) UNIQUE,
+            email VARCHAR(40),
+            password VARCHAR(14),
+            created_at TIMESTAMP DEFAULT current_timestamp
+        )`,
+        `CREATE TABLE IF NOT EXISTS books (
+            id serial PRIMARY KEY,
+            title TEXT,
+            author VARCHAR(20),
+            publication_date DATE,
+            genre VARCHAR(20),
+            user_id INT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )`,
+        `CREATE TABLE IF NOT EXISTS comments (
+            id serial PRIMARY KEY,
+            text TEXT,
+            created_at TIMESTAMP DEFAULT current_timestamp,
+            book_id INT,
+            user_id INT,
+            FOREIGN KEY (book_id) REFERENCES books(id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )`,
+    ];
 
-        for(let table of tables) {
-            await pool.query(table)
-        }
-    } catch (err) {
-        console.log(err);
-        process.exit(1)
+    for (let table of tables) {
+      await pool.query(table);
     }
-}
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
+};

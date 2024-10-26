@@ -1,3 +1,4 @@
+import pool from "../database/database.js"
 export function addNewBook (req, res, next) {
     try {
         res.status(200).send("Success")
@@ -6,9 +7,13 @@ export function addNewBook (req, res, next) {
     }
 }
 
-export function getAllBooks (req, res, next) {
+export async function getAllBooks (req, res, next) {
     try {
-        res.status(200).send("Success")
+        const allBooks = await pool.query("select * from books")
+        res.status(200).send({
+            status:"success",
+            data:allBooks.rows
+        })
     } catch (error) {
         next(error)
     }
