@@ -19,12 +19,17 @@ export async function addNewUser(req, res, next) {
 }
 
 
-export function loginIn (req, res, next) {
+export async function loginIn (req, res, next) {
     try {
         const {username, password} = req.body
-        const result = loginUserToSystem(username, password)
-        const {success} = result
-        res.status(200).send("Success")
+        const result =  await loginUserToSystem(username, password)
+        const {found} = result
+
+        if (found) {
+            res.status(200).send("You are loged in successfully")
+        } else {
+            res.status(400).send("Username or password incorrect")
+        }
     } catch (error) {
         next(error)
     }

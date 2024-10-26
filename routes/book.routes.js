@@ -6,12 +6,13 @@ import {
     updateBookById, 
     deleteBookById
 } from "../controllers/index.controller.js"
+import { validationBook, validationUpdateBook } from "../middleware/book.middleware.js"
 const bookRouter = express.Router()
 
-bookRouter.post("/", addNewBook)
+bookRouter.post("/", validationBook, addNewBook)
 bookRouter.get("/", getAllBooks)
 bookRouter.get("/:id", getBookById)
-bookRouter.put("/:id", updateBookById)
+bookRouter.put("/:id", validationUpdateBook,updateBookById)
 bookRouter.delete("/:id", deleteBookById)
 
 
