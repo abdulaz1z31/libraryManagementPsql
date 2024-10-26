@@ -26,6 +26,9 @@ export const validationLogin = async (req, res, next) => {
   if (!username || !password) {
     return res.status(409).end("Enter username and password");
   }
+  if (!checkPasswordForStrong(password)) {
+    return res.status(400).end("Enter a strong password")
+  }
   next();
 };
 
