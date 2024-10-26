@@ -67,7 +67,7 @@ export const checkIfIdExists = async (id) => {
   }
 };
 
-const checkIfIdExistsBooks = async (id) => {
+export const checkIfIdExistsBooks = async (id) => {
   try {
     const result = await pool.query(`SELECT id FROM books WHERE id = $1`, [id]);
     

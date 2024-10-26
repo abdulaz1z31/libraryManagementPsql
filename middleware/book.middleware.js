@@ -1,6 +1,11 @@
 import pool from "../database/database.js";
-import { getByIdBook} from "../service/book.service.js";
-import { checkIfIdExists, validationBookForUniq } from "../service/book.service.js";
+import { getByIdBook } from "../service/book.service.js";
+import {
+  checkIfIdExists,
+  validationBookForUniq,
+} from "../service/book.service.js";
+import { lastLoginedUserId } from "../service/index.servece.js";
+
 export const validationBook = async (req, res, next) => {
   const { title, author, publication_date, genre } = req.body;
 
@@ -22,44 +27,35 @@ export const validationBook = async (req, res, next) => {
   next();
 };
 
-
-
 export const validationUpdateBook = async (req, res, next) => {
-    const bookId = req.params.id
-    const dataToUpdate = req.body
-    
-    
-    const bookData = await getByIdBook(bookId)
-    const { data } = bookData
-    
-    for(let key in dataToUpdate) {
-        data[key] = dataToUpdate[key]
-    }
+  const bookId = req.params.id;
+  const dataToUpdate = req.body;
 
-    const checkUserId = await checkIfIdExists(data['user_id'])
-   
-    if (checkUserId) {
-        return res.status(400).send("User not found with this user id")
-    }
+  const bookData = await getByIdBook(bookId);
+  const { data } = bookData;
 
-    
-    const checkForBook = await validationBookForUniq(data)
+  for (let key in dataToUpdate) {
+    data[key] = dataToUpdate[key];
+  }
+  
+  const checkUserId = await checkIfIdExists(data["user_id"]);
+  const userId = lastLoginedUserId()
+  if (userId != data["user_id"]) {
+      return res.status(400).send("You can not update others book")//bu uzi qoshmagan kitobnu update qilolmaydi
+  }
+  if (checkUserId) {
+    return res.status(400).send("User not found with this user id");
+  }
 
-    
-    if (checkForBook) {
-        return res.status(403).send("Update qilinganda dublicat bolib qoladi yangi narsa kiriting bu inglizchasini bilmadim ")
-    } else {
-        next()
-    }
+  const checkForBook = await validationBookForUniq(data);
 
-   
-
-}
-
-
-
-
-
-
-
-
+  if (checkForBook) {
+    return res
+      .status(403)
+      .send(
+        "Update qilinganda dublicat bolib qoladi yangi narsa kiriting bu inglizchasini bilmadim "
+      );
+  } else {
+    next();
+  }
+};

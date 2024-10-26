@@ -6,7 +6,7 @@ import {
     updateBookById, 
     deleteBookById
 } from "../controllers/index.controller.js"
-import { validationBook, validationUpdateBook } from "../middleware/book.middleware.js"
+import { validationBook, validationUpdateBook } from "../middleware/index.middleware.js"
 const bookRouter = express.Router()
 
 bookRouter.post("/", validationBook, addNewBook)

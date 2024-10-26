@@ -50,6 +50,11 @@ INSERT INTO comments (text, book_id, user_id) VALUES
 ('Book Three was a fantastic journey!', 3, 3),  
 ('Book Four was entertaining.', 4, 4);
 
+
+
+SELECT * FROM comments where book_id = $1
+
+
 UPDATE books
 set title = 'Book Two', author = 'Author B', publication_date = '2021-11-23', genre = 'Non-Fiction', user_id = 2
 where id = 2;
